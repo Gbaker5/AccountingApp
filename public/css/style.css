@@ -1,3 +1,8 @@
+*{
+    margin:0;
+    padding:0;
+}
+
 body{
 text-align: center;
 
@@ -12,13 +17,48 @@ h1{
 .resultct{
     border: 1px solid black;
     list-style-type: none;
+    overflow: auto;
+    height:400px;
 }
 
 .eachresult{
-    width:100%
+    width:100%;
+    border: 1px solid black;
+}
+
+.name{
+    color: blue;
+    text-decoration: underline;
+}
+
+.company{
+    color: red;
+    text-decoration: underline;
+}
+
+.professional, .witty, .funny{
+    margin-right: 10px;
 }
 
 .professional{
     width:100%;
-    border: 1px solid black
+    border: 1px solid black;
+    background-color: rgba(0,0,128, 0.7);
+    margin-bottom: 5px;
+    padding: 5px 0px;
+}
+
+.witty{
+    width:100%;
+    border: 1px solid black;
+    background-color: rgba(255, 165,0, 1.0);
+    margin-bottom: 5px;
+    padding: 5px 0px;
+}
+
+.funny{
+    width:100%;
+    border: 1px solid black;
+    background-color: rgba(50, 205, 50, 1.0);
+    padding: 5px 0px;
 }

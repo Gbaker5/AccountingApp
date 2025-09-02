@@ -10,7 +10,7 @@ module.exports = {
     getPrompt: async (req,res) => {
 
         const Prompts = await PromptResult.find().sort({createdAt: "asc"})
-        console.log(Prompts)
+        //console.log(Prompts)
 
 
         res.render('prompt.ejs', {myResults: Prompts})
@@ -18,7 +18,7 @@ module.exports = {
 
     postPrompt: async (req,res) =>{
 
-        console.log(req.body.prompt)
+        //console.log(req.body.prompt)
         const company = req.body.company
         const prompt = req.body.prompt
 

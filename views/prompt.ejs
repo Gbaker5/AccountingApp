@@ -13,11 +13,13 @@
 
     <p>Paste the bio below and I'll help you respond</p>
     <form action="/postPrompt" method="POST">
+        <label for="personName">Friend Name</label>
+        <input type="text" name="personName">
+        
         <label for="company">Company Name</label>
         <input type="text" name="company">
 
-        <label for="personName">Friend Name</label>
-        <input type="text" name="personName">
+       
 
         <textarea cols="100" rows="20" name="prompt" id="promptInput"></textarea>
 
@@ -30,7 +32,7 @@
             <ul class="resultct">
                 <% for(i=0;i<myResults.length;i++){ %>
                     <li class="eachresult">
-                        <p><%=myResults[i].name%> from <%=myResults[i].company%></p>
+                        <p><span class="name"><%=myResults[i].name%></span> from <span class="company"><%=myResults[i].company%></span> </p>
                         <p>Response options:</p>
                         <div class="professional">
                             <p><%=myResults[i].professional%></p>

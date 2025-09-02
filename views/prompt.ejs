@@ -27,12 +27,23 @@
     
         <div>
             <p>Results</p>
-            <ul>
+            <ul class="resultct">
                 <% for(i=0;i<myResults.length;i++){ %>
-                    <li>
+                    <li class="eachresult">
                         <p><%=myResults[i].name%> from <%=myResults[i].company%></p>
                         <p>Response options:</p>
-                        <p><%=myResults[i].result%></p>
+                        <div class="professional">
+                            <p><%=myResults[i].professional%></p>
+                        </div>
+                        <div  class="witty">
+                            <p><%=myResults[i].witty%></p>
+                        </div>
+                        <div class="funny">
+                            <p ><%=myResults[i].funny%></p>
+                        </div>
+                        
+                       
+                       
                     </li>
                 
                 
@@ -41,7 +52,7 @@
         </div>
    
 
-    <span id="result"></span>
+    
     
 </body>
 </html>

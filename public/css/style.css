@@ -8,10 +8,17 @@ text-align: center;
 h1{
     color: red;
 }
-.completed{
-    text-decoration: line-through;
-    color: gray;
+
+.resultct{
+    border: 1px solid black;
+    list-style-type: none;
 }
-.not{
-    text-decoration: underline;
+
+.eachresult{
+    width:100%
+}
+
+.professional{
+    width:100%;
+    border: 1px solid black
 }

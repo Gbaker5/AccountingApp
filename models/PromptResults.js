@@ -14,7 +14,15 @@ const PromptResultSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  result: {
+  professional: {
+    type: String,
+    required: true,
+  },
+  witty: {
+    type: String,
+    required: true,
+  },
+  funny: {
     type: String,
     required: true,
   }

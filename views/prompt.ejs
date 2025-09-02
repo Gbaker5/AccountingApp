@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Message Creator</h1>
+    <p>Lets decide what message were going to send...</p>
+
+    <p>Paste the bio below and I'll help you respond</p>
+    <form action="/postPrompt" method="POST">
+        <label for="company">Company Name</label>
+        <input type="text" name="company">
+
+        <label for="personName">Friend Name</label>
+        <input type="text" name="personName">
+
+        <textarea cols="100" rows="20" name="prompt" id="promptInput"></textarea>
+
+        <button type="submit">Generate</button>
+    </form>
+
+    
+        <div>
+            <p>Results</p>
+            <ul>
+                <% for(i=0;i<myResults.length;i++){ %>
+                    <li>
+                        <p><%=myResults[i].name%> from <%=myResults[i].company%></p>
+                        <p>Response options:</p>
+                        <p><%=myResults[i].result%></p>
+                    </li>
+                
+                
+               <% } %>
+            </ul>
+        </div>
+   
+
+    <span id="result"></span>
+    
+</body>
+</html>

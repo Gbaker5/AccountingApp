@@ -4,7 +4,7 @@ const cloudinary = require("../middleware/cloudinary");
 const Client = require("../models/Client")
 const PdfDocs = require("../models/PdfDocs")
 
-////
+////////////////
 const fs = require("fs");
 const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.js");
 const vision = require("@google-cloud/vision");
@@ -15,8 +15,77 @@ const PdfDocs = require("../models/PdfDocs");
 const visionClient = new vision.ImageAnnotatorClient();
 const storage = new Storage();
 
+//Extract text via pdfjs
+async function extractPdfText(filePath) {
+  const loadingTask = pdfjsLib.getDocument(filePath);
+  const pdf = await loadingTask.promise;
+
+  let pages = [];
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    const text = content.items.map(i => i.str).join(" ");
+
+    pages.push({
+      page: i,
+      text,
+    });
+  }
+
+  return pages;
+}
+
+//Decide of OCR is needed
+function needsOCR(pages) {
+  const totalText = pages.map(p => p.text).join("");
+  return totalText.length < 300;
+}
 
 
+//OCR GOGGLE VISION
+async function runVisionOCR(localPath, bucketName) {
+  const fileName = `ocr/${Date.now()}.pdf`;
+
+  await storage.bucket(bucketName).upload(localPath, {
+    destination: fileName,
+  });
+
+  const request = {
+    requests: [
+      {
+        inputConfig: {
+          gcsSource: { uri: `gs://${bucketName}/${fileName}` },
+          mimeType: "application/pdf",
+        },
+        features: [{ type: "DOCUMENT_TEXT_DETECTION" }],
+        outputConfig: {
+          gcsDestination: { uri: `gs://${bucketName}/output/` },
+        },
+      },
+    ],
+  };
+
+  const [operation] =
+    await visionClient.asyncBatchAnnotateFiles(request);
+  await operation.promise();
+
+  const [files] = await storage
+    .bucket(bucketName)
+    .getFiles({ prefix: "output/" });
+
+  let ocrText = "";
+
+  for (const file of files) {
+    const [contents] = await file.download();
+    const data = JSON.parse(contents.toString());
+    ocrText += data.responses[0].fullTextAnnotation.text;
+  }
+
+  return ocrText;
+}
+
+//////////////////
 module.exports = {
     getIndex: (req,res)=>{
         res.render('index.ejs')
@@ -69,31 +138,48 @@ module.exports = {
     },
     postPdfDocs: async (req, res) => {
         try {
-          if (!req.file) {
-            return res.status(400).json({ message: "No file uploaded" });
+          const localPath = req.file.path;
+        
+          // 1. Extract text
+          const pages = await extractPdfText(localPath);
+        
+          let finalText = "";
+        
+          // 2. OCR fallback
+          if (needsOCR(pages)) {
+            finalText = await runVisionOCR(
+              localPath,
+              process.env.GCS_BUCKET
+            );
+          } else {
+            finalText = pages.map(p => p.text).join("\n");
           }
       
-          // Upload PDF to Cloudinary
-          const result = await cloudinary.uploader.upload(req.file.path, {
+          // 3. Upload PDF
+          const upload = await cloudinary.uploader.upload(localPath, {
             resource_type: "raw",
             folder: "pdf_docs",
           });
       
+          // 4. Store metadata + raw text
           await PdfDocs.create({
             title: req.body.title,
-            fileUrl: result.secure_url,
-            cloudinaryId: result.public_id,
+            fileUrl: upload.secure_url,
+            cloudinaryId: upload.public_id,
+            rawText: finalText,
             client: req.params.id,
             user: req.user.id,
           });
       
-          console.log("PDF document uploaded");
+          fs.unlinkSync(localPath); // cleanup
+      
           res.redirect("back");
         } catch (err) {
           console.error(err);
           res.status(500).json({ error: err.message });
         }
-    },
+        },
+
 
     getExistingDocs: async (req,res) => {
         //pDF files by client, sorted by time created

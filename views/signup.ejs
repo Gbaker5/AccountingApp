@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+</head>
+
+<body>
+    <h1>Signup</h1>
+
+    <div class="">
+                        <!--Error Meeesages-->
+                        <% if (locals.messages.errors) { %>
+                            <% messages.errors.forEach( el => { %>
+                                <div class="alert alert-danger"><%= el.msg %></div>
+                            <% }) %>    
+                        <% } %>
+                        <% if (locals.messages.info) { %>
+                            <% messages.info.forEach( el => { %>
+                                <div class="alert alert-info"><%= el.msg %></div>
+                            <% }) %>    
+                        <% } %>
+                        <!---->
+						<form action="/signup" method="POST"> <!--Submit form-->
+							<div class="row gtr-50 gtr-uniform">
+							<div class="col-6">
+								<label for="userName" class="form-label"></label>
+								<input type="text" class="form-control" id="userName" name="userName" placeholder="Username">
+							  </div>
+							<div class="col-6">
+							  <label for="exampleInputEmail1" class="form-label"></label>
+							  <input type="email" class="form-control" id="exampleInputEmail1"  name="email" placeholder="Email address">
+							  <div id="emailHelp" class="form-text"></div>
+							</div>
+							<div class="col-12">
+							  <label for="password" class="form-label"></label>
+							  <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+							</div>
+							<div class="col-12">
+								<label for="confirmPassword" class="form-label"></label>
+								<input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
+							  </div>
+							  <div>
+								<ul class="actions special">
+									<li><input type="submit"/></li>
+								</ul>
+							  </div>
+							
+							</div>
+						  </form>
+					</div>
+
+</body>
+</html>

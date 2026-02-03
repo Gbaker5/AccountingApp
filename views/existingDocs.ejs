@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Existing Docs</title>
+</head>
+<body>
+    <h1>Client Documents</h1>
+
+    <nav>
+        <ul>
+            <li><a href="/clientPage/<%=clientId%>">Client Page</a></li>
+            <li><a href="/newDoc/<%=clientId%>">New Doc</a></li>
+            <li><a href="/existingDocs/<%=clientId%>">Client Docs</a></li>
+            <li><a href="/analytics/<%=clientId%>">Analytics</a></li>
+            <li><a href="/graphs/<%=clientId%>">Graphs</a></li>
+        </ul>
+    </nav>
+    
+
+    <div>
+        <h2>Pdf Documents</h2>
+        <ul>
+            <%for(let i=0; i < pdfDocs.length ; i ++) {%>
+
+                <form action="" method="POST">
+
+                    <li id="<%=pdfDocs[i]._id%>">File Title: "<%=pdfDocs[i].title%>" -- Time Added:  <%= new Date(pdfDocs[i].createdAt).toLocaleString() %> <button type="submit">Scan In</button></li><!--If scanned in = yes remove button, If = no show button-->
+
+                </form>
+
+            <%}%>
+            
+        </ul>
+    </div>
+</body>
+</html>

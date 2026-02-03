@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Page</title>
+</head>
+<body>
+    <h1>Client Name's Page</h1>
+    <p></p> <!--Put name here-->
+    <nav>
+        <ul>
+            <li><a href="/getExistingClients">My Clients</a></li>
+            <li><a href="/clientPage/<%=clientId%>">Client Page</a></li>
+            <li><a href="/newDoc/<%=clientId%>">New Doc</a></li>
+            <li><a href="/existingDocs/<%=clientId%>">Client Docs</a></li>
+            <li><a href="/analytics/<%=clientId%>">Analytics</a></li>
+            <li><a href="/graphs/<%=clientId%>">Graphs</a></li>
+        </ul>
+    </nav>
+    
+</body>
+</html>

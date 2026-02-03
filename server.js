@@ -1,14 +1,20 @@
 const express = require('express')
 const app = express()
+const flash = require("express-flash");
 const session = require("express-session");
+const passport = require("passport");
 const connectDB = require('./config/database')
 const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
 
 const homeRoutes = require('./routes/home')
-const todoRoutes = require('./routes/todos')
+//const todoRoutes = require('./routes/todos')
 
 require('dotenv').config({path: './config/.env'})
+
+// Passport config
+require("./config/passport")(passport);
+
 
 connectDB()
 
@@ -29,6 +35,14 @@ app.use(
       }),
     })
   );
+
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+//Use flash messages for errors, info, ect...
+app.use(flash());
+
 
 app.use('/', homeRoutes)
 //app.use('/todos', todoRoutes)

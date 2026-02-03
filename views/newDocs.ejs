@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Docs</title>
+</head>
+<body>
+    <h1>New Documents</h1>
+
+    <nav>
+        <ul>
+            <li><a href="/clientPage/<%=clientId%>">Client Page</a></li>
+            <li><a href="/newDoc/<%=clientId%>">New Doc</a></li>
+            <li><a href="/existingDocs/<%=clientId%>">Client Docs</a></li>
+            <li><a href="/analytics/<%=clientId%>">Analytics</a></li>
+            <li><a href="/graphs/<%=clientId%>">Graphs</a></li>
+        </ul>
+    </nav>
+
+    <div>
+        <p>Upload Bank Statement</p>
+        <form action="/postPdfDocs/<%=clientId%>" method="POST" enctype="multipart/form-data">
+            <label for="title"></label>
+            <input type="text" placeholder="Document Name" name="title" required>
+            <input type="file" name="pdf" accept="application/pdf" required>
+
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>

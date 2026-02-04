@@ -24,6 +24,22 @@ const PdfDocsSchema = new mongoose.Schema({
   rawText: {
     type: String,
   },
+  transactions: [
+    {
+      date: String,
+      merchant: String,
+      amount: Number,
+      category: String,
+    },
+  ],
+
+  analyzed: {
+    type: Boolean,
+    default: false,
+  },
+  
+  
+  
   
 
 },{timestamps: true});

@@ -1,5 +1,6 @@
 //const { GoogleGenAI } = require("@google/genai");
 //const PromptResult = require("../models/PromptResults")
+const fs = require("fs");
 const cloudinary = require("../middleware/cloudinary");
 const Client = require("../models/Client")
 const PdfDocs = require("../models/PdfDocs")
@@ -57,8 +58,7 @@ module.exports = {
         res.render('clientPage.ejs', {clientId: req.params.id, })
     },
     getNewDocs: async (req,res) => {
-        console.log(typeof pdfParse)
-
+        
         res.render('newDocs.ejs', {clientId: req.params.id})
     },
     postPdfDocs: async (req, res) => {
@@ -89,7 +89,7 @@ module.exports = {
           });
       
           // 4️⃣ Save document
-          await PdfDocs.create({
+         const pdfDoc = await PdfDocs.create({
             title: req.body.title,
             fileUrl: result.secure_url,
             cloudinaryId: result.public_id,
@@ -98,11 +98,11 @@ module.exports = {
             rawText: finalText,
           });
       
-          fs.unlinkSync(localPath);
+          
       
           console.log("PDF uploaded + text extracted");
 
-          
+
           //
 
             const transactions = await analyzeTransactions(finalText);
@@ -112,8 +112,10 @@ module.exports = {
               analyzed: true,
             });
 
+            console.log('File Analyzed')
 
-      
+        fs.unlinkSync(localPath);
+        
           res.redirect("back");
         } catch (err) {
           console.error(err);

@@ -1,17 +1,7 @@
-const mongoose = require('mongoose')
-
-const PdfDocsSchema = new mongoose.Schema({
+const StatementArrSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-  },
-  fileUrl: {
-    type: String,
-    require: true,
-  },
-  cloudinaryId: {
-    type: String,
-    require: true,
   },
   client: {
     type: String,
@@ -25,7 +15,8 @@ const PdfDocsSchema = new mongoose.Schema({
     type: String,
   },
   
+  
 
 },{timestamps: true});
 
-module.exports = mongoose.model('PdfDocs', PdfDocsSchema)
+module.exports = mongoose.model('StatementArr', StatementArrSchema)

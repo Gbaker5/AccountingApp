@@ -24,7 +24,7 @@
         <ul>
             <%for(let i=0; i < pdfDocs.length ; i ++) {%>
 
-                <form action="" method="POST">
+                <form action="/postAnalyzeDocs/<%=clientId%>" method="POST">
 
                     <li id="<%=pdfDocs[i]._id%>">File Title: "<%=pdfDocs[i].title%>" -- Time Added:  <%= new Date(pdfDocs[i].createdAt).toLocaleString() %> <button type="submit">Scan In</button></li><!--If scanned in = yes remove button, If = no show button-->
 

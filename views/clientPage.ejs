@@ -1,23 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Profile | Quantio</title>
+
+  <!--Tailwind-->
+      <script src="https://cdn.tailwindcss.com"></script>
+
+
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Manrope:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
 </head>
-<body>
-    <h1>Client Name's Page</h1>
-    <p></p> <!--Put name here-->
-    <nav>
-        <ul>
-            <li><a href="/getExistingClients">My Clients</a></li>
-            <li><a href="/clientPage/<%=clientId%>">Client Page</a></li>
-            <li><a href="/newDoc/<%=clientId%>">New Doc</a></li>
-            <li><a href="/existingDocs/<%=clientId%>">Client Docs</a></li>
-            <li><a href="/analytics/<%=clientId%>">Analytics</a></li>
-            <li><a href="/graphs/<%=clientId%>">Graphs</a></li>
-        </ul>
-    </nav>
-    
+
+<body class="bg-[#F6F8F7] font-inter text-gray-800 min-h-screen">
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <div class="text-xl font-manrope font-semibold text-[#0B3D2E]">
+        Quantio
+      </div>
+
+      <nav class="flex items-center gap-5 text-sm">
+        <a href="/getExistingClients" class="hover:text-[#0B3D2E] transition">
+          My Clients
+        </a>
+        <a href="/newDoc/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          New Doc
+        </a>
+        <a href="/existingDocs/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          Client Docs
+        </a>
+        <a href="/analytics/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          Analytics
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-7xl mx-auto px-6 py-10">
+
+    <!-- Page Header -->
+    <section class="mb-8">
+      <h1 class="text-3xl font-manrope font-semibold text-[#121417]">
+        <%= client.firstName %> <%= client.lastName %>
+      </h1>
+      <p class="text-gray-600 mt-1">
+        Client profile and financial overview
+      </p>
+    </section>
+
+    <!-- Grid -->
+    <section class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+      <!-- LEFT: Profile & Financials -->
+      <div class="xl:col-span-2 space-y-6">
+
+        <!-- Contact Info -->
+        <div class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6 space-y-4">
+          <h2 class="font-manrope font-medium text-lg">Contact Information</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+              <input
+                type="text"
+                name="contact.address"
+                placeholder="Enter address"
+                value="<%= profile?.contact?.address || '' %>"
+                class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                       focus:ring-2 focus:ring-[#0B3D2E] focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+              <input
+                type="text"
+                name="contact.phoneNumber"
+                placeholder="Enter phone number"
+                value="<%= profile?.contact?.phoneNumber || '' %>"
+                class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                       focus:ring-2 focus:ring-[#0B3D2E] focus:outline-none"
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input
+                type="email"
+                name="contact.email"
+                placeholder="Enter email address"
+                value="<%= profile?.contact?.email || '' %>"
+                class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                       focus:ring-2 focus:ring-[#0B3D2E] focus:outline-none"
+              />
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Financial Snapshot -->
+        <div class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6 space-y-4">
+          <h2 class="font-manrope font-medium text-lg">Financial Snapshot</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Income</label>
+              <input
+                type="number"
+                name="financialSnapshot.monthlyIncome"
+                value="<%= profile?.financialSnapshot?.monthlyIncome || '' %>"
+                class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                       focus:ring-2 focus:ring-[#0B3D2E] focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Monthly Expenses</label>
+              <input
+                type="number"
+                name="financialSnapshot.monthlyExpenses"
+                value="<%= profile?.financialSnapshot?.monthlyExpenses || '' %>"
+                class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                       focus:ring-2 focus:ring-[#0B3D2E] focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Risk Tolerance</label>
+              <select
+                name="financialSnapshot.riskTolerance"
+                class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                       focus:ring-2 focus:ring-[#0B3D2E] focus:outline-none"
+              >
+                <option value="">Select</option>
+                <option value="low" <%= profile?.financialSnapshot?.riskTolerance === 'low' ? 'selected' : '' %>>Low</option>
+                <option value="medium" <%= profile?.financialSnapshot?.riskTolerance === 'medium' ? 'selected' : '' %>>Medium</option>
+                <option value="high" <%= profile?.financialSnapshot?.riskTolerance === 'high' ? 'selected' : '' %>>High</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Goals -->
+      <div class="space-y-6">
+
+        <!-- Add / Update Goal -->
+        <div class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6 space-y-4">
+          <h2 class="font-manrope font-medium text-lg">Add / Update Goal</h2>
+
+          <select name="goal.goalType" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm">
+            <option value="savings">Savings</option>
+            <option value="debt">Debt</option>
+            <option value="tax">Tax</option>
+            <option value="emergency">Emergency</option>
+            <option value="custom">Custom</option>
+          </select>
+
+          <input type="number" name="goal.targetAmount" placeholder="Target Amount"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" />
+
+          <input type="date" name="goal.targetDate"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" />
+
+          <input type="number" name="goal.priority" placeholder="Priority (1–5)"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" />
+
+          <textarea name="goal.notes" placeholder="Notes"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"></textarea>
+        </div>
+
+        <!-- Existing Goals -->
+        <div class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6">
+          <h2 class="font-manrope font-medium text-lg mb-4">Goals</h2>
+
+          <div class="space-y-3 max-h-[320px] overflow-y-auto pr-2">
+
+            <% if (profile?.goals?.length) { %>
+              <% profile.goals.forEach(goal => { %>
+                <div class="border border-gray-200 rounded-lg p-3 text-sm">
+                  <p class="font-medium"><%= goal.goalType %></p>
+                  <p>Target: $<%= goal.targetAmount %></p>
+                  <p>Deadline: <%= goal.targetDate?.toDateString() %></p>
+                  <p>Priority: <%= goal.priority %></p>
+
+                  <form
+                    action="/goalDelete/<%= clientId %>/goals/<%= goal._id %>?_method=DELETE"
+                    method="POST"
+                    class="mt-2"
+                  >
+                    <button type="submit" class="text-red-600 text-xs hover:underline">
+                      Delete
+                    </button>
+                  </form>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p class="text-sm text-gray-500">No goals added yet.</p>
+            <% } %>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- Save Button -->
+    <div class="mt-8">
+      <button
+        id="saveProfile"
+        class="bg-[#0B3D2E] hover:bg-[#0A3528]
+               text-white font-medium px-6 py-3 rounded-lg transition"
+      >
+        Save Changes
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ⚠️ SCRIPT PRESERVED EXACTLY -->
+  <script>
+    document.getElementById("saveProfile").addEventListener("click", async () => {
+      const inputs = document.querySelectorAll("input, select, textarea");
+      const payload = {};
+
+      inputs.forEach(input => {
+        if (!input.value) return;
+
+        const keys = input.name.split(".");
+        let current = payload;
+
+        keys.forEach((key, index) => {
+          if (index === keys.length - 1) {
+            current[key] = input.value;
+          } else {
+            current[key] = current[key] || {};
+            current = current[key];
+          }
+        });
+      });
+
+      await fetch(`/updateClientPage/<%= client._id %>`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      location.reload();
+    });
+  </script>
+
 </body>
 </html>

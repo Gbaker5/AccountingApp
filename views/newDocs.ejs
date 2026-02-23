@@ -1,32 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Docs</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Documents | Quantio</title>
+
+  <!--Tailwind-->
+      <script src="https://cdn.tailwindcss.com"></script>
+
+
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Manrope:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
 </head>
-<body>
-    <h1>New Documents</h1>
 
-    <nav>
-        <ul>
-            <li><a href="/clientPage/<%=clientId%>">Client Page</a></li>
-            <li><a href="/newDoc/<%=clientId%>">New Doc</a></li>
-            <li><a href="/existingDocs/<%=clientId%>">Client Docs</a></li>
-            <li><a href="/analytics/<%=clientId%>">Analytics</a></li>
-            <li><a href="/graphs/<%=clientId%>">Graphs</a></li>
-        </ul>
-    </nav>
+<body class="bg-[#F6F8F7] font-inter text-gray-800 min-h-screen">
 
-    <div>
-        <p>Upload Bank Statement</p>
-        <form action="/postPdfDocs/<%=clientId%>" method="POST" enctype="multipart/form-data">
-            <label for="title"></label>
-            <input type="text" placeholder="Document Name" name="title" required>
-            <input type="file" name="pdf" accept="application/pdf" required>
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-            <button type="submit">Upload</button>
-        </form>
+      <div class="text-xl font-manrope font-semibold text-[#0B3D2E]">
+        Quantio
+      </div>
+
+      <nav class="flex items-center gap-5 text-sm">
+        <a href="/clientPage/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          Client Page
+        </a>
+        <a href="/existingDocs/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          Client Docs
+        </a>
+        <a href="/analytics/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          Analytics
+        </a>
+      </nav>
+
     </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-4xl mx-auto px-6 py-10">
+
+    <!-- Page Header -->
+    <section class="mb-8">
+      <h1 class="text-3xl font-manrope font-semibold text-[#121417]">
+        New Documents for <%= client.firstName %> <%= client.lastName %>
+      </h1>
+      <p class="mt-2 text-gray-600">
+        Upload bank statements to analyze transactions and generate insights.
+      </p>
+    </section>
+
+    <!-- Upload Card -->
+    <section
+      class="bg-white/70 backdrop-blur border border-white/30
+             rounded-xl shadow-sm p-6 space-y-6"
+    >
+
+      <form
+        id="uploadForm"
+        action="/postPdfDocs/<%= clientId %>"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-5"
+      >
+
+        <!-- Document Title -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            Document name
+          </label>
+          <input
+            type="text"
+            name="title"
+            required
+            placeholder="e.g. January Bank Statement"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-[#0B3D2E]"
+          />
+        </div>
+
+        <!-- File Upload -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">
+            PDF file
+          </label>
+          <input
+            type="file"
+            name="pdf"
+            accept="application/pdf"
+            required
+            class="block w-full text-sm text-gray-600
+                   file:mr-4 file:py-2 file:px-4
+                   file:rounded-md file:border-0
+                   file:bg-[#0B3D2E] file:text-white
+                   hover:file:bg-[#0A3528] transition"
+          />
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="bg-[#0B3D2E] hover:bg-[#0A3528]
+                 text-white font-medium rounded-lg
+                 px-6 py-3 transition"
+        >
+          Upload & Analyze
+        </button>
+
+      </form>
+
+    </section>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading hidden">
+      <div class="spinner"></div>
+      <p class="mt-3 text-sm text-gray-700">Analyzing document…</p>
+    </div>
+
+    <!-- Success Message -->
+    <% if (success && success.length) { %>
+      <div
+        id="flash"
+        class="mt-6 rounded-lg border border-[#2E7D5B]/30
+               bg-[#2E7D5B]/10 text-[#2E7D5B]
+               px-4 py-3 text-sm font-medium"
+      >
+        <%= success[0] %>
+      </div>
+    <% } %>
+
+    <!-- Error Message -->
+    <% if (error && error.length) { %>
+      <div
+        class="mt-6 rounded-lg border border-red-200
+               bg-red-50 text-red-700
+               px-4 py-3 text-sm"
+      >
+        <%= error[0] %>
+      </div>
+    <% } %>
+
+  </main>
+
+  <!-- Existing Script (unchanged) -->
+  <script src="/js/main.js"></script>
+
 </body>
 </html>

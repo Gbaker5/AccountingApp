@@ -1,20 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <title>Home</title>
-</head>
-<body>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantio | Financial Clarity Without the Stress</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <h1>Accounting App</h1>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Manrope:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body class="bg-[#F6F8F7] font-inter text-gray-800">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <div class="text-xl font-manrope font-semibold text-[#0B3D2E]">
+        Quantio
+      </div>
+
+      <!-- Nav -->
+      <nav class="flex items-center gap-4 text-sm">
+        <a
+          href="/login"
+          class="text-gray-700 hover:text-[#0B3D2E] transition"
+        >
+          Login
+        </a>
+        <a
+          href="/signup"
+          class="bg-[#0B3D2E] hover:bg-[#0A3528]
+                 text-white font-medium px-4 py-2 rounded-lg transition"
+        >
+          Sign Up
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+    <!-- Hero Text -->
+    <div>
+      <h1 class="text-4xl lg:text-5xl font-manrope font-semibold text-[#121417] leading-tight">
+        Financial clarity <br class="hidden sm:block" />
+        without the stress
+      </h1>
+
+      <p class="mt-5 text-lg text-gray-600 max-w-xl">
+        Quantio helps accounting professionals organize client data, analyze
+        financial documents, and surface meaningful insights with AI-powered
+        analysis.
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href="/signup"
+          class="bg-[#0B3D2E] hover:bg-[#0A3528]
+                 text-white font-medium px-6 py-3 rounded-lg transition"
+        >
+          Get Started
+        </a>
+
+        <a
+          href="/login"
+          class="border border-[#0B3D2E]
+                 text-[#0B3D2E] hover:bg-[#0B3D2E]/10
+                 font-medium px-6 py-3 rounded-lg transition"
+        >
+          Sign In
+        </a>
+      </div>
+    </div>
+
+    <!-- Hero Visual (abstract placeholder) -->
+    <div class="relative">
+     <div class="absolute -top-10 -right-10 w-72 h-72 bg-green-300/20 rounded-full blur-3xl"></div>
+
+  <div class="relative bg-white border border-gray-200
+              rounded-2xl shadow-xl p-6 space-y-6">
 
     <div>
-        <a href="/login">Login</a>
-        <a href="/signup">Sign Up</a>
+      <h3 class="font-semibold text-gray-900">Acme Holdings</h3>
+      <p class="text-sm text-gray-500">Financial Overview</p>
     </div>
-    
-    
+
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-gray-50 p-4 rounded-lg">
+        <p class="text-xs text-gray-500">Revenue</p>
+        <p class="text-xl font-semibold text-green-600">$128,400</p>
+      </div>
+      <div class="bg-gray-50 p-4 rounded-lg">
+        <p class="text-xs text-gray-500">Expenses</p>
+        <p class="text-xl font-semibold text-red-500">$84,920</p>
+      </div>
+    </div>
+
+    <div class="bg-green-50 border border-green-200
+                rounded-lg p-4">
+      <p class="text-sm font-medium text-green-800">
+        AI Insight
+      </p>
+      <p class="text-sm text-green-700 mt-1">
+        Expenses increased 12% this month,
+        mainly due to SaaS subscriptions.
+      </p>
+    </div>
+
+  </div>
+    </div>
+
+  </section>
+
+  <!-- Features Section -->
+  <section class="max-w-7xl mx-auto px-6 pb-24">
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Feature Card -->
+      <div class="bg-white/70 backdrop-blur border border-white/30
+                  rounded-xl shadow-sm p-6">
+        <h3 class="font-manrope font-medium text-lg text-[#121417]">
+          Centralized Client Data
+        </h3>
+        <p class="mt-2 text-sm text-gray-600">
+          Keep client profiles, financial snapshots, and goals organized in
+          one secure place.
+        </p>
+      </div>
+
+      <div class="bg-white/70 backdrop-blur border border-white/30
+                  rounded-xl shadow-sm p-6">
+        <h3 class="font-manrope font-medium text-lg text-[#121417]">
+          Automated Document Analysis
+        </h3>
+        <p class="mt-2 text-sm text-gray-600">
+          Upload bank statements and let Quantio extract, categorize,
+          and analyze transactions automatically.
+        </p>
+      </div>
+
+      <div class="bg-white/70 backdrop-blur border border-white/30
+                  rounded-xl shadow-sm p-6">
+        <h3 class="font-manrope font-medium text-lg text-[#121417]">
+          Actionable AI Insights
+        </h3>
+        <p class="mt-2 text-sm text-gray-600">
+          Turn raw financial data into clear insights you can confidently
+          share with clients.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-200 bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row
+                items-center justify-between gap-4 text-sm text-gray-600">
+
+      <span>
+        © <%= new Date().getFullYear() %> Quantio
+      </span>
+
+      <div class="flex gap-4">
+        <a href="/login" class="hover:text-[#0B3D2E]">Login</a>
+        <a href="/signup" class="hover:text-[#0B3D2E]">Sign Up</a>
+      </div>
+
+    </div>
+  </footer>
+
 </body>
 </html>

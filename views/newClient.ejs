@@ -1,31 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Client</title>
-</head>
-<body>
-    <h1>New Client</h1>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Client | Quantio</title>
 
-    <form action="/newClient" method="POST"> 
-        <div class="">
-            <label for="fName" class="form-label">FirstName</label>
-            <input type="text" class="form-control" id="fname" name="fName">
+      <script src="https://cdn.tailwindcss.com"></script>
+
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Manrope:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body class="bg-[#F6F8F7] font-inter text-gray-800 min-h-screen">
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <div class="text-xl font-manrope font-semibold text-[#0B3D2E]">
+        Quantio
+      </div>
+
+      <!-- Nav -->
+      <nav class="flex items-center gap-6 text-sm">
+        <a href="/profile" class="hover:text-[#0B3D2E] transition">
+          Dashboard
+        </a>
+        <a
+          href="/logout"
+          class="text-red-600 hover:underline"
+        >
+          Logout
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-3xl mx-auto px-6 py-12">
+
+    <!-- Page Header -->
+    <section class="mb-8">
+      <h1 class="text-3xl font-manrope font-semibold text-[#121417]">
+        Add New Client
+      </h1>
+      <p class="mt-2 text-gray-600">
+        Create a client profile to begin uploading documents and analyzing data.
+      </p>
+    </section>
+
+    <!-- Form Card -->
+    <section
+      class="bg-white/70 backdrop-blur border border-white/30
+             rounded-xl shadow-sm p-8"
+    >
+      <form action="/newClient" method="POST" class="space-y-6">
+
+        <!-- First Name -->
+        <div>
+          <label
+            for="fname"
+            class="block text-sm font-medium text-gray-700 mb-1"
+          >
+            First name
+          </label>
+          <input
+            type="text"
+            id="fname"
+            name="fName"
+            required
+            placeholder="John"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-[#0B3D2E]"
+          />
         </div>
-        <div class="">
-            <label for="lName" class="form-label">LastName</label>
-            <input type="text" class="form-control" id="lname" name="lName">
+
+        <!-- Last Name -->
+        <div>
+          <label
+            for="lname"
+            class="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Last name
+          </label>
+          <input
+            type="text"
+            id="lname"
+            name="lName"
+            required
+            placeholder="Doe"
+            class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                   focus:outline-none focus:ring-2 focus:ring-[#0B3D2E]"
+          />
         </div>
-        <div class="">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="name" name="address">
+
+        <!-- Submit -->
+        <div class="pt-4 flex gap-4">
+          <button
+            type="submit"
+            class="bg-[#0B3D2E] hover:bg-[#0A3528]
+                   text-white font-medium rounded-lg
+                   px-6 py-3 transition"
+          >
+            Add Client
+          </button>
+
+          <a
+            href="/profile"
+            class="border border-gray-300 text-gray-700
+                   rounded-lg px-6 py-3 hover:bg-gray-100 transition"
+          >
+            Cancel
+          </a>
         </div>
-        <div class="">
-            <label for="name" class="form-label">Phone Number</label>
-            <input type="text" class="form-control" id="name" name="phoneNumber">
-        </div>
-        <button type="submit">Add Client</button>
-    </form>
+
+      </form>
+    </section>
+
+  </main>
+
 </body>
 </html>

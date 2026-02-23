@@ -9,14 +9,7 @@ const ClientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  address: {
-    type: String,
-    required: true,
-  },
-  phoneNumber: {
-    type: String,
-    required: true,
-  },
+  
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

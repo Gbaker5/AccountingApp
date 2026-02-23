@@ -1,21 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics</title>
-</head>
-<body>
-    <h1>Analytics</h1>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics | Quantio</title>
 
-    <nav>
-        <ul>
-            <li><a href="/clientPage/<%=clientId%>">Client Page</a></li>
-            <li><a href="/newDoc/<%=clientId%>">New Doc</a></li>
-            <li><a href="/existingDocs/<%=clientId%>">Client Docs</a></li>
-            <li><a href="/analytics/<%=clientId%>">Analytics</a></li>
-            <li><a href="/graphs/<%=clientId%>">Graphs</a></li>
-        </ul>
-    </nav>
+  <!--Tailwind-->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Manrope:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body class="bg-[#F6F8F7] font-inter text-gray-800 min-h-screen">
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <div class="text-xl font-manrope font-semibold text-[#0B3D2E]">
+        Quantio
+      </div>
+
+      <nav class="flex items-center gap-5 text-sm">
+        <a href="/clientPage/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          Client Page
+        </a>
+        <a href="/newDoc/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          New Doc
+        </a>
+        <a href="/existingDocs/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          Client Docs
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-7xl mx-auto px-6 py-10 space-y-10">
+
+    <!-- Page Header -->
+    <section>
+      <h1 class="text-3xl font-manrope font-semibold text-[#121417]">
+        Analytics for <%= client.firstName %> <%= client.lastName %>
+      </h1>
+      <p class="mt-2 text-gray-600">
+        Financial summaries, trends, and AI-powered insights.
+      </p>
+    </section>
+
+    <!-- KPI Summary -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6">
+        <p class="text-sm text-gray-500">Total Income</p>
+        <p class="text-2xl font-manrope font-semibold mt-1">
+          $<%= summary.income.toFixed(2) %>
+        </p>
+      </div>
+
+      <div class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6">
+        <p class="text-sm text-gray-500">Total Expenses</p>
+        <p class="text-2xl font-manrope font-semibold mt-1">
+          $<%= summary.expenses.toFixed(2) %>
+        </p>
+      </div>
+
+      <div class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6">
+        <p class="text-sm text-gray-500">Net</p>
+        <p class="text-2xl font-manrope font-semibold mt-1
+          <%= summary.net >= 0 ? 'text-green-700' : 'text-red-600' %>">
+          $<%= summary.net.toFixed(2) %>
+        </p>
+      </div>
+
+    </section>
+
+    <!-- Summary Chart -->
+    <section class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6">
+      <h2 class="font-manrope font-medium text-lg mb-4">Income vs Expenses</h2>
+
+      <button
+        onclick="toggleChart('summaryChart')"
+        class="text-sm text-[#0B3D2E] font-medium mb-4"
+      >
+        Show / Hide Chart
+      </button>
+
+      <div id="summaryChart" class="hidden h-[320px]">
+        <canvas id="incomeExpenseChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Category Breakdown -->
+    <section class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6">
+      <h2 class="font-manrope font-medium text-lg mb-4">Top Spending Categories</h2>
+
+      <ul class="text-sm space-y-1 mb-4">
+        <% categoryTotals.forEach(cat => { %>
+          <li>
+            <strong><%= cat._id %></strong>: $<%= cat.total.toFixed(2) %>
+          </li>
+        <% }) %>
+      </ul>
+
+      <button
+        onclick="toggleChart('categoryChartWrap')"
+        class="text-sm text-[#0B3D2E] font-medium mb-4"
+      >
+        Show / Hide Chart
+      </button>
+
+      <div id="categoryChartWrap" class="hidden h-[320px]">
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Trends -->
+    <section class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6">
+      <h2 class="font-manrope font-medium text-lg mb-4">Monthly Trends</h2>
+
+      <div class="max-h-[300px] overflow-y-auto border rounded-lg">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-100 sticky top-0">
+            <tr>
+              <th class="px-3 py-2 text-left">Month</th>
+              <th class="px-3 py-2 text-left">Income</th>
+              <th class="px-3 py-2 text-left">Expenses</th>
+              <th class="px-3 py-2 text-left">Net</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% trends.forEach(t => { %>
+              <tr class="border-t">
+                <td class="px-3 py-2"><%= t._id %></td>
+                <td class="px-3 py-2">$<%= t.income.toFixed(2) %></td>
+                <td class="px-3 py-2">$<%= t.expenses.toFixed(2) %></td>
+                <td class="px-3 py-2">$<%= t.net.toFixed(2) %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <button
+        onclick="toggleChart('trendChartWrap')"
+        class="text-sm text-[#0B3D2E] font-medium mt-4"
+      >
+        Show / Hide Chart
+      </button>
+
+      <div id="trendChartWrap" class="hidden h-[320px] mt-4">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Largest Transactions -->
+    <section class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6">
+      <h2 class="font-manrope font-medium text-lg mb-4">Largest Expenses</h2>
+
+      <div class="max-h-[300px] overflow-y-auto border rounded-lg">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-100 sticky top-0">
+            <tr>
+              <th class="px-3 py-2 text-left">Date</th>
+              <th class="px-3 py-2 text-left">Merchant</th>
+              <th class="px-3 py-2 text-left">Amount</th>
+              <th class="px-3 py-2 text-left">Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% largestTransactions.forEach(doc => { %>
+              <% const tx = doc.transactions; %>
+              <tr class="border-t">
+                <td class="px-3 py-2"><%= tx.date %></td>
+                <td class="px-3 py-2"><%= tx.merchant %></td>
+                <td class="px-3 py-2">$<%= tx.amount.toFixed(2) %></td>
+                <td class="px-3 py-2"><%= tx.category %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+
+      <button
+        onclick="toggleChart('largestChartWrap')"
+        class="text-sm text-[#0B3D2E] font-medium mt-4"
+      >
+        Show / Hide Chart
+      </button>
+
+      <div id="largestChartWrap" class="hidden h-[320px] mt-4">
+        <canvas id="largestExpensesChart"></canvas>
+      </div>
+    </section>
+
+    <!-- AI Insights -->
+    <section class="bg-white/70 backdrop-blur border border-white/30 rounded-xl shadow-sm p-6">
+      <h2 class="font-manrope font-medium text-lg mb-4">AI Insights</h2>
+
+      <button
+        id="generateInsights"
+        data-client-id="<%= clientId %>"
+        class="bg-[#0B3D2E] hover:bg-[#0A3528]
+               text-white font-medium rounded-lg px-6 py-3 mb-4 transition"
+      >
+        Generate AI Insights
+      </button>
+
+      <div
+        id="aiOutput"
+        class="prose prose-sm max-w-none text-gray-800"
+      ></div>
+    </section>
+
+  </main>
+
+  <!-- DATA -->
+  <script>
+    window.ANALYTICS_DATA = {
+      clientId: "<%= clientId %>",
+      summary: <%- JSON.stringify(summary) %>,
+      categoryTotals: <%- JSON.stringify(categoryTotals) %>,
+      trends: <%- JSON.stringify(trends) %>,
+      largestTransactions: <%- JSON.stringify(largestTransactions) %>
+    };
+  </script>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/js/analytics.js"></script>
+  <script src="/js/insight.js"></script>
+
+  <!--<script>
+    document.getElementById("generateInsights").addEventListener("click", async () => {
+      const btn = document.getElementById("generateInsights");
+      const output = document.getElementById("aiOutput");
+
+      btn.disabled = true;
+      btn.innerText = "Generating…";
+      output.innerHTML = "<p>Thinking…</p>";
+
+      const res = await fetch(`/analytics/<%= clientId %>/ai-insight`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+        
+      });
+
+      const data = await res.json();
+      output.innerHTML = data.insights;
+
+      btn.disabled = false;
+      btn.innerText = "Regenerate AI Insights";
+    });
+  </script>-->
+
 </body>
 </html>

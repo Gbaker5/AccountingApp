@@ -15,7 +15,7 @@ async function extractPdfText(filePath) {
 }
 
 
-//Decide of OCR is needed
+//Decide if OCR is needed
 function needsOCR(text) {
   return text.trim().length < 300;
 }

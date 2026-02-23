@@ -1,38 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Existing Docs</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Documents | Quantio</title>
+
+  <!--Tailwind-->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Manrope:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
 </head>
-<body>
-    <h1>Client Documents</h1>
 
-    <nav>
-        <ul>
-            <li><a href="/clientPage/<%=clientId%>">Client Page</a></li>
-            <li><a href="/newDoc/<%=clientId%>">New Doc</a></li>
-            <li><a href="/existingDocs/<%=clientId%>">Client Docs</a></li>
-            <li><a href="/analytics/<%=clientId%>">Analytics</a></li>
-            <li><a href="/graphs/<%=clientId%>">Graphs</a></li>
-        </ul>
-    </nav>
-    
+<body class="bg-[#F6F8F7] font-inter text-gray-800 min-h-screen">
 
-    <div>
-        <h2>Pdf Documents</h2>
-        <ul>
-            <%for(let i=0; i < pdfDocs.length ; i ++) {%>
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-                <form action="/postAnalyzeDocs/<%=clientId%>" method="POST">
+      <div class="text-xl font-manrope font-semibold text-[#0B3D2E]">
+        Quantio
+      </div>
 
-                    <li id="<%=pdfDocs[i]._id%>">File Title: "<%=pdfDocs[i].title%>" -- Time Added:  <%= new Date(pdfDocs[i].createdAt).toLocaleString() %> <button type="submit">Scan In</button></li><!--If scanned in = yes remove button, If = no show button-->
+      <nav class="flex items-center gap-5 text-sm">
+        <a href="/clientPage/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          Client Page
+        </a>
+        <a href="/newDoc/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          New Doc
+        </a>
+        <a href="/analytics/<%= clientId %>" class="hover:text-[#0B3D2E] transition">
+          Analytics
+        </a>
+      </nav>
 
-                </form>
-
-            <%}%>
-            
-        </ul>
     </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-7xl mx-auto px-6 py-10">
+
+    <!-- Page Header -->
+    <section class="mb-8">
+      <h1 class="text-3xl font-manrope font-semibold text-[#121417]">
+        Documents for <%= client.firstName %> <%= client.lastName %>
+      </h1>
+      <p class="mt-2 text-gray-600">
+        View uploaded documents and inspect extracted text.
+      </p>
+    </section>
+
+    <!-- Layout -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- Documents List -->
+      <div
+        class="lg:col-span-1 bg-white/70 backdrop-blur
+               border border-white/30 rounded-xl shadow-sm p-4"
+      >
+        <h2 class="font-manrope font-medium text-lg mb-4">
+          PDF Documents
+        </h2>
+
+        <ul class="space-y-2 max-h-[420px] overflow-y-auto pr-2">
+
+          <% if (pdfDocs.length) { %>
+            <% for (let i = 0; i < pdfDocs.length; i++) { %>
+              <li
+                id="<%= pdfDocs[i]._id %>"
+                class="border border-gray-200 rounded-lg p-3
+                       hover:bg-gray-50 transition"
+              >
+                <p class="font-medium text-sm text-[#121417]">
+                  <%= pdfDocs[i].title %>
+                </p>
+                <p class="text-xs text-gray-500 mt-1">
+                  Added: <%= new Date(pdfDocs[i].createdAt).toLocaleString() %>
+                </p>
+
+                <button
+                  class="view-raw-text mt-2 text-sm font-medium
+                         text-[#0B3D2E] hover:underline"
+                  data-pdf-id="<%= pdfDocs[i]._id %>"
+                >
+                  View Scanned Text
+                </button>
+              </li>
+            <% } %>
+          <% } else { %>
+            <li class="text-sm text-gray-500">
+              No documents uploaded yet.
+            </li>
+          <% } %>
+
+        </ul>
+      </div>
+
+      <!-- Instructions / Empty Viewer -->
+      <div
+        class="lg:col-span-2 bg-white/50 border border-dashed
+               border-gray-300 rounded-xl p-6 text-gray-500"
+      >
+        <h2 class="font-manrope font-medium text-lg mb-2">
+          Document Preview
+        </h2>
+        <p class="text-sm">
+          Select a document from the list to view the extracted text.
+        </p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Modal -->
+  <div
+    id="rawTextModal"
+    class="fixed inset-0 z-50 hidden
+           bg-black/40 backdrop-blur-sm
+           flex items-center justify-center"
+  >
+    <div
+      class="bg-white rounded-xl shadow-lg
+             max-w-4xl w-full max-h-[80vh]
+             flex flex-col"
+    >
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-5 py-3 border-b">
+        <h3 id="modalTitle" class="font-manrope font-medium text-lg">
+          Document Text
+        </h3>
+        <button
+          id="closeModal"
+          class="text-gray-500 hover:text-gray-800 text-xl"
+        >
+          &times;
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="p-5 overflow-y-auto">
+        <pre
+          id="rawTextContent"
+          class="text-sm text-gray-800 whitespace-pre-wrap"
+        ></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Existing Script -->
+  <script src="/js/pdfPreview.js" defer></script>
+
 </body>
 </html>

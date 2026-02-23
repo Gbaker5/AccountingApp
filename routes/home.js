@@ -20,11 +20,16 @@ router.post('/newClient', homeController.postNewClient)
 router.get('/getExistingClients', homeController.getExistingClients)
 
 router.get('/clientPage/:id', homeController.getClientPage)
+router.put('/updateClientPage/:id', homeController.updateClientPage)
+router.delete('/goalDelete/:id/goals/:goalId', homeController.deleteGoal)
 router.get('/newDoc/:id', homeController.getNewDocs)
 router.post('/postPdfDocs/:id', upload.single("pdf"), homeController.postPdfDocs)
 router.get('/existingDocs/:id', homeController.getExistingDocs)
-router.post('/postAnalyzeDocs/:id', homeController.postAnalyzeDocs)
+router.get("/pdf/:id/raw-text", homeController.getRawText);
+
+//router.post('/postAnalyzeDocs/:id', homeController.postAnalyzeDocs)
 router.get('/analytics/:id', homeController.getAnalytics)
+router.post('/analytics/:id/ai-insight', homeController.postAiInsight)
 router.get('/graphs/:id', homeController.getGraphs)
 
 

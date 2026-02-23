@@ -6,6 +6,9 @@ const passport = require("passport");
 const connectDB = require('./config/database')
 const MongoStore = require("connect-mongo");
 const mongoose = require("mongoose");
+const morgan = require('morgan'); 
+const methodOverride = require("method-override");
+
 
 const homeRoutes = require('./routes/home')
 //const todoRoutes = require('./routes/todos')
@@ -42,6 +45,20 @@ app.use(passport.session());
 
 //Use flash messages for errors, info, ect...
 app.use(flash());
+
+// Use morgan middleware with a predefined format (e.g., 'dev', 'tiny', 'combined')
+app.use(morgan('dev')); 
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
+
+//METHOD OVERRIDE
+app.use(methodOverride("_method"));
+
+
 
 
 app.use('/', homeRoutes)

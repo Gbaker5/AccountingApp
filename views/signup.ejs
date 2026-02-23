@@ -1,55 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | Quantio</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Manrope:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
 </head>
 
-<body>
-    <h1>Signup</h1>
+<body class="min-h-screen bg-[#F6F8F7] flex items-center justify-center font-inter text-gray-800">
 
-    <div class="">
-                        <!--Error Meeesages-->
-                        <% if (locals.messages.errors) { %>
-                            <% messages.errors.forEach( el => { %>
-                                <div class="alert alert-danger"><%= el.msg %></div>
-                            <% }) %>    
-                        <% } %>
-                        <% if (locals.messages.info) { %>
-                            <% messages.info.forEach( el => { %>
-                                <div class="alert alert-info"><%= el.msg %></div>
-                            <% }) %>    
-                        <% } %>
-                        <!---->
-						<form action="/signup" method="POST"> <!--Submit form-->
-							<div class="row gtr-50 gtr-uniform">
-							<div class="col-6">
-								<label for="userName" class="form-label"></label>
-								<input type="text" class="form-control" id="userName" name="userName" placeholder="Username">
-							  </div>
-							<div class="col-6">
-							  <label for="exampleInputEmail1" class="form-label"></label>
-							  <input type="email" class="form-control" id="exampleInputEmail1"  name="email" placeholder="Email address">
-							  <div id="emailHelp" class="form-text"></div>
-							</div>
-							<div class="col-12">
-							  <label for="password" class="form-label"></label>
-							  <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-							</div>
-							<div class="col-12">
-								<label for="confirmPassword" class="form-label"></label>
-								<input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
-							  </div>
-							  <div>
-								<ul class="actions special">
-									<li><input type="submit"/></li>
-								</ul>
-							  </div>
-							
-							</div>
-						  </form>
-					</div>
+  <!-- Signup Card -->
+  <main class="w-full max-w-lg bg-white/70 backdrop-blur border border-white/30 shadow-sm rounded-xl p-8">
+
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <h1 class="text-2xl font-manrope font-semibold text-[#0B3D2E]">
+        Create your account
+      </h1>
+      <p class="text-sm text-gray-600 mt-1">
+        Get started with Quantio
+      </p>
+    </div>
+
+    <!-- Flash Messages -->
+    <div class="space-y-2 mb-4">
+      <% if (locals.messages && locals.messages.errors) { %>
+        <% messages.errors.forEach(el => { %>
+          <div class="rounded-md bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-2">
+            <%= el.msg %>
+          </div>
+        <% }) %>
+      <% } %>
+
+      <% if (locals.messages && locals.messages.info) { %>
+        <% messages.info.forEach(el => { %>
+          <div class="rounded-md bg-blue-50 border border-blue-200 text-blue-700 text-sm px-4 py-2">
+            <%= el.msg %>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+
+    <!-- Signup Form -->
+    <form action="/signup" method="POST" class="space-y-5">
+
+      <!-- Username -->
+      <div>
+        <label for="userName" class="block text-sm font-medium text-gray-700 mb-1">
+          Username
+        </label>
+        <input
+          type="text"
+          id="userName"
+          name="userName"
+          placeholder="Your username"
+          required
+          class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-[#0B3D2E]"
+        />
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label for="exampleInputEmail1" class="block text-sm font-medium text-gray-700 mb-1">
+          Email address
+        </label>
+        <input
+          type="email"
+          id="exampleInputEmail1"
+          name="email"
+          placeholder="you@company.com"
+          required
+          class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-[#0B3D2E]"
+        />
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+          Password
+        </label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="••••••••"
+          required
+          class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-[#0B3D2E]"
+        />
+      </div>
+
+      <!-- Confirm Password -->
+      <div>
+        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">
+          Confirm password
+        </label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="••••••••"
+          required
+          class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm
+                 focus:outline-none focus:ring-2 focus:ring-[#0B3D2E]"
+        />
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="w-full bg-[#0B3D2E] hover:bg-[#0A3528]
+               text-white font-medium rounded-lg py-2.5
+               transition"
+      >
+        Create Account
+      </button>
+
+    </form>
+
+    <!-- Footer -->
+    <div class="mt-6 text-center text-sm text-gray-600">
+      <span>Already have an account?</span>
+      <a
+        href="/login"
+        class="text-[#0B3D2E] font-medium hover:underline ml-1"
+      >
+        Log in
+      </a>
+    </div>
+
+  </main>
 
 </body>
 </html>

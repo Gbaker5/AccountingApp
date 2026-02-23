@@ -1,28 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Existing Clients</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Existing Clients | Quantio</title>
+
+  <!--Tailwind-->
+      <script src="https://cdn.tailwindcss.com"></script>
+
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Manrope:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
 </head>
-<body>
-    <h1>Existing Clients</h1>
 
-    <nav>
-        <ul>
-            <li><a href="/newClient">New Client</a></li>
-             <li><a href="/profile">Profile</a></li>
-        </ul>
-    </nav>
+<body class="bg-[#F6F8F7] font-inter text-gray-800 min-h-screen">
 
-    <div>
-        <h2>My Clients</h2>
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-         <ul>
-            <%for(let i=0; i < myClients.length; i++){%>
-                <li><a href="/clientPage/<%=myClients[i]._id%>"><%=myClients[i].firstName%> <%=myClients[i].lastName%></a></li>
-            <%}%>
-        </ul>
+      <!-- Logo -->
+      <div class="text-xl font-manrope font-semibold text-[#0B3D2E]">
+        Quantio
+      </div>
+
+      <!-- Nav -->
+      <nav class="flex items-center gap-6 text-sm">
+        <a href="/newClient" class="hover:text-[#0B3D2E] transition">
+          New Client
+        </a>
+        <a href="/profile" class="hover:text-[#0B3D2E] transition">
+          Dashboard
+        </a>
+      </nav>
+
     </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-5xl mx-auto px-6 py-10">
+
+    <!-- Page Header -->
+    <section class="mb-8">
+      <h1 class="text-3xl font-manrope font-semibold text-[#121417]">
+        Existing Clients
+      </h1>
+      <p class="mt-2 text-gray-600">
+        Select a client to view their profile, documents, and analytics.
+      </p>
+    </section>
+
+    <!-- Clients List Card -->
+    <section
+      class="bg-white/70 backdrop-blur border border-white/30
+             rounded-xl shadow-sm p-6"
+    >
+
+      <!-- Scroll Container -->
+      <ul class="divide-y divide-gray-200 max-h-[420px] overflow-y-auto">
+
+        <% for (let i = 0; i < myClients.length; i++) { %>
+          <li>
+            <a
+              href="/clientPage/<%= myClients[i]._id %>"
+              class="flex items-center justify-between px-3 py-3
+                     hover:bg-gray-50 rounded-md transition"
+            >
+              <div>
+                <p class="font-medium text-[#121417]">
+                  <%= myClients[i].firstName %> <%= myClients[i].lastName %>
+                </p>
+                <p class="text-xs text-gray-500">
+                  Client ID: <%= myClients[i]._id %>
+                </p>
+              </div>
+
+              <span class="text-sm text-[#0B3D2E] font-medium">
+                View →
+              </span>
+            </a>
+          </li>
+        <% } %>
+
+        <% if (!myClients.length) { %>
+          <li class="text-center py-8 text-gray-500 text-sm">
+            No clients found. Add your first client to get started.
+          </li>
+        <% } %>
+
+      </ul>
+
+    </section>
+
+  </main>
+
 </body>
 </html>

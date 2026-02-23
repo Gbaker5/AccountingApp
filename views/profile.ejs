@@ -1,19 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | Quantio</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Manrope:wght@500;600&display=swap"
+    rel="stylesheet"
+  />
 </head>
-<body>
-    <h1>Profile</h1>
-    
-    <nav>
-        <ul>
-            <li><a href="/newClient">New Client</a></li>
-            <li><a href="/getExistingClients">Existing Clients</a></li>
-            <li><a href="/Logout">Logout</a></li>
-        </ul>
-    </nav>
+
+<body class="bg-[#F6F8F7] font-inter text-gray-800 min-h-screen">
+
+  <!-- Header / Nav -->
+  <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
+      <div class="text-xl font-manrope font-semibold text-[#0B3D2E]">
+        Quantio
+      </div>
+
+      <!-- Nav Links -->
+      <nav class="flex items-center gap-6 text-sm">
+        <a href="/newClient" class="hover:text-[#0B3D2E] transition">
+          New Client
+        </a>
+        <a href="/getExistingClients" class="hover:text-[#0B3D2E] transition">
+          Existing Clients
+        </a>
+        <a
+          href="/Logout"
+          class="text-red-600 hover:underline"
+        >
+          Logout
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-7xl mx-auto px-6 py-10">
+
+    <!-- Welcome -->
+    <section class="mb-10">
+      <h1 class="text-3xl font-manrope font-semibold text-[#121417]">
+        Dashboard
+      </h1>
+      <p class="mt-2 text-gray-600">
+        Manage clients, upload documents, and view financial insights.
+      </p>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- New Client -->
+      <a
+        href="/newClient"
+        class="bg-white/70 backdrop-blur border border-white/30
+               rounded-xl shadow-sm p-6 hover:shadow-md transition"
+      >
+        <h3 class="font-manrope font-medium text-lg text-[#121417]">
+          Add a New Client
+        </h3>
+        <p class="mt-2 text-sm text-gray-600">
+          Create a new client profile and begin tracking their financial data.
+        </p>
+      </a>
+
+      <!-- Existing Clients -->
+      <a
+        href="/getExistingClients"
+        class="bg-white/70 backdrop-blur border border-white/30
+               rounded-xl shadow-sm p-6 hover:shadow-md transition"
+      >
+        <h3 class="font-manrope font-medium text-lg text-[#121417]">
+          View Existing Clients
+        </h3>
+        <p class="mt-2 text-sm text-gray-600">
+          Access client profiles, documents, analytics, and AI insights.
+        </p>
+      </a>
+
+      <!-- Placeholder / Future -->
+      <div
+        class="bg-white/50 border border-dashed border-gray-300
+               rounded-xl p-6 text-gray-500"
+      >
+        <h3 class="font-manrope font-medium text-lg">
+          Insights Overview
+        </h3>
+        <p class="mt-2 text-sm">
+          High-level metrics and summaries can live here later.
+        </p>
+      </div>
+
+    </section>
+
+  </main>
+
 </body>
 </html>

@@ -6,19 +6,28 @@ const Client = require("../models/Client")
 const PdfDocs = require("../models/PdfDocs")
 const {extractPdfText,needsOCR,} = require("../services/pdfService");
 const { runVisionOCR } = require("../services/ocrService");
-const { analyzeTransactions } = require("../services/aiService");
+const { processTransactions } = require("../services/aiService");
+const ClientProfile = require("../models/ClientProfile")
+const {
+  buildClientContext,
+  getAIInsights
+} = require("../services/aiInsight");
+const {computeAnalytics} = require("../services/computeAnalytics");
 
 
 //////////////////
 module.exports = {
     getIndex: (req,res)=>{
+        console.log("Index Page Loaded")
         res.render('index.ejs')
     },
 
     getProfile: (req,res) => {
+        console.log("Profile Page Loaded")
         res.render('profile.ejs')
     },
     getNewClient: (req,res) => {
+        
         res.render('newClient.ejs')
     },
     postNewClient: async (req,res) => {
@@ -39,27 +48,111 @@ module.exports = {
      }
     },
     getExistingClients: async (req,res) => {
+        
         console.log(req.user._id)
+        const client = await Client.findById(req.params.id)
+        console.log(client)
 
         const myClients = await Client.find({createdBy: req.user._id})
         console.log(myClients)
 
 
 
-        res.render('existingClients.ejs', ({myClients: myClients}))
+        res.render('existingClients.ejs', ({myClients: myClients, client:client}))
     },
     getClientPage: async (req,res) => {
-        
-        //const client = await Client.findById(req.params.id)
-        //console.log(client)
-        //client: client
-    
+       console.log("Client Page Loaded");
 
-        res.render('clientPage.ejs', {clientId: req.params.id, })
+  const client = await Client.findById(req.params.id);
+  if (!client) {
+    console.log("CLIENT NOT FOUND");
+    return res.status(404).send("Client not found");
+  }
+
+  const profile = await ClientProfile.findOne({
+    client: client._id
+  });
+
+  console.log("PROFILE FOUND:", profile);
+
+
+        res.render('clientPage.ejs', {clientId: req.params.id, client: client, profile: profile})
     },
+    updateClientPage: async (req, res) => {
+  try {
+    const clientId = req.params.id;
+    console.log(clientId)
+
+    const update = {
+      $set: {
+        client: clientId,
+      }
+    };
+
+    // CONTACT INFO
+    if (req.body.contact) {
+      update.$set.contact = req.body.contact;
+    }
+
+    // FINANCIAL SNAPSHOT
+    if (req.body.financialSnapshot) {
+      update.$set.financialSnapshot = req.body.financialSnapshot;
+    }
+
+    // GOALS (append)
+    if (req.body.goal) {
+      update.$push = {
+        goals: req.body.goal
+      };
+    }
+
+    const updatedProfile = await ClientProfile.findOneAndUpdate(
+      { client: clientId },
+      update,
+      {
+        new: true,
+        upsert: true,
+        runValidators: true,
+      }
+    );
+
+    console.log("UPDATED PROFILE:", updatedProfile);
+
+    res.status(200).json(updatedProfile);
+
+  } catch (err) {
+    console.error("UPDATE ERROR:", err);
+    res.status(500).json({ error: "Failed to update client profile" });
+  }
+}
+,
+deleteGoal: async (req,res) =>{
+    try {
+    const clientId = req.params.id;
+    const goalId = req.params.goalId;
+
+    await ClientProfile.findOneAndUpdate(
+      { client: clientId },
+      {
+        $pull: {
+          goals: { _id: goalId }
+        }
+      }
+    );
+
+    res.redirect(`/clientPage/${clientId}`);
+
+  } catch (err) {
+    console.error("DELETE GOAL ERROR:", err);
+    res.status(500).send("Failed to delete goal");
+  }
+
+},
     getNewDocs: async (req,res) => {
+        const client = await Client.findById(req.params.id)
+        console.log(client)
         
-        res.render('newDocs.ejs', {clientId: req.params.id})
+        res.render('newDocs.ejs', {clientId: req.params.id, client:client })
     },
     postPdfDocs: async (req, res) => {
         try {
@@ -69,12 +162,12 @@ module.exports = {
       
           const localPath = req.file.path;
       
-          // 1️⃣ Extract text via pdf-parse
+          // Extract text via pdf-parse
           const { text } = await extractPdfText(localPath);
       
           let finalText = text;
       
-          // 2️⃣ OCR fallback (Vision)
+          //  OCR fallback (Vision)
           if (needsOCR(text)) {
             finalText = await runVisionOCR(
               localPath,
@@ -82,13 +175,13 @@ module.exports = {
             );
           }
       
-          // 3️⃣ Upload PDF to Cloudinary
+          //  Upload PDF to Cloudinary
           const result = await cloudinary.uploader.upload(localPath, {
             resource_type: "raw",
             folder: "pdf_docs",
           });
       
-          // 4️⃣ Save document
+          //  Save document
          const pdfDoc = await PdfDocs.create({
             title: req.body.title,
             fileUrl: result.secure_url,
@@ -98,14 +191,13 @@ module.exports = {
             rawText: finalText,
           });
       
-          
       
           console.log("PDF uploaded + text extracted");
 
 
           //
 
-            const transactions = await analyzeTransactions(finalText);
+            const transactions = await processTransactions(finalText);
 
             await PdfDocs.findByIdAndUpdate(pdfDoc._id, {
               transactions,
@@ -115,10 +207,13 @@ module.exports = {
             console.log('File Analyzed')
 
         fs.unlinkSync(localPath);
-        
+
+        req.flash("success", "Document processed successfully ✔");
+
           res.redirect("back");
         } catch (err) {
           console.error(err);
+          req.flash("error", "Failed to process document");
           res.status(500).json({ error: err.message });
         }
         },
@@ -126,33 +221,117 @@ module.exports = {
 
 
     getExistingDocs: async (req,res) => {
+        const client = await Client.findById(req.params.id)
+        console.log(client)
         //pDF files by client, sorted by time created
        const Pdfs = await PdfDocs.find({client:req.params.id}).sort({createdAt: "asc"})
-       console.log(Pdfs)
+       //console.log(Pdfs)
 
 
-        res.render('existingDocs.ejs', {clientId: req.params.id, pdfDocs: Pdfs})
+        res.render('existingDocs.ejs', {clientId: req.params.id, pdfDocs: Pdfs, client:client})
     },
-    postAnalyzeDocs: async (req,res) => {
-        try{
-            const client = req.params.id
-            console.log(client)
-            
-            
+    getRawText: async (req, res) => {
+  try {
+    const pdf = await PdfDocs.findById(req.params.id).select("rawText title");
 
+    if (!pdf) {
+      return res.status(404).json({ error: "PDF not found" });
+    }
 
-            console.log("Pdf analyzed")
-            res.redirect(`/existingdocs/${req.params.id}`);
-        } catch (err) {
-            console.log(err)
-        }
-
-    },
+    res.json({
+      title: pdf.title,
+      rawText: pdf.rawText,
+    });
+  } catch (err) {
+    console.error("RAW TEXT ERROR:", err);
+    res.status(500).json({ error: "Failed to load raw text" });
+  }
+},
+   
     getAnalytics: async (req,res) => {
-        res.render('analytics.ejs', {clientId: req.params.id})
+        
+        try {
+
+            const clientId = req.params.id;
+
+            const client = await Client.findById(clientId)
+            console.log(client)
+            const profile = await ClientProfile.findOne({ client: clientId });
+
+
+      
+        const aggregates = await computeAnalytics(clientId);
+
+
+
+
+      res.render("analytics.ejs", {
+        //summary,                // income / expenses / net
+        //categoryTotals,         // category totals
+        //largestTransactions,    // biggest expenses
+        //trends,                 // month-by-month
+        ...aggregates,
+        clientId: req.params.id,
+        client:client,
+        profile,
+        //insights,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Analytics error");
+    }
+
+
+
+
+       
+    },
+    postAiInsight: async(req,res) =>{
+
+    
+  try {
+    const clientId = req.params.id;
+
+    const client = await Client.findById(clientId);
+    const profile = await ClientProfile.findOne({ client: clientId });
+
+    
+    //const aggregates = {
+    //  summary,
+    //  categoryTotals,
+    //  largestTransactions,
+    //  trends,
+    //};
+
+    const aggregates = await computeAnalytics(clientId);
+
+
+    const context = buildClientContext({
+      client,
+      profile,
+      aggregates,
+    });
+
+    const insights = await getAIInsights(context);
+    console.log(insights)
+
+    res.json({ insights });
+
+  } catch (err) {
+    console.error("AI ERROR:", err);
+    res.status(500).json({ error: "Failed to generate AI insights" });
+  }
+
+
+
+
     },
     getGraphs: async (req,res) => {
-        res.render('graphs.ejs', {clientId: req.params.id})
+        const client = await Client.findById(req.params.id)
+        console.log(client)
+
+
+        res.render('graphs.ejs', {clientId: req.params.id, client:client})
     },
 
 

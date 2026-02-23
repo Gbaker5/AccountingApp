@@ -29,6 +29,8 @@ const PdfDocsSchema = new mongoose.Schema({
       date: String,
       merchant: String,
       amount: Number,
+      deposit: Boolean,
+      withdrawal: Boolean,
       category: String,
     },
   ],

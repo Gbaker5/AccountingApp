@@ -29,7 +29,7 @@ app.use(express.json())
 // Setup Sessions - stored in MongoDB
 app.use(
     session({
-      secret: "keyboard cat",
+      secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       store: MongoStore.create({
@@ -63,7 +63,11 @@ app.use(methodOverride("_method"));
 
 app.use('/', homeRoutes)
 //app.use('/todos', todoRoutes)
+
+
  
-app.listen(process.env.PORT, ()=>{
-    console.log('Server is running, you better catch it!')
-})    
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

@@ -1,11 +1,13 @@
 const vision = require("@google-cloud/vision");
 const { Storage } = require("@google-cloud/storage");
-const visionClient = new vision.ImageAnnotatorClient();
-const storage = new Storage();
+const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+const visionClient = new vision.ImageAnnotatorClient(credentials);
+const storage = new Storage(credentials);
 
 
 //OCR GOGGLE VISION
 async function runVisionOCR(localPath, bucketName) {
+  console.log("OCR used")
   const timestamp = Date.now();
   const inputName = `ocr/input-${timestamp}.pdf`;
   const outputPrefix = `ocr/output-${timestamp}/`;
